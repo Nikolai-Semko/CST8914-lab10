@@ -17,7 +17,7 @@ class MenuButtonActions {
     this.lastMenuitem = false;
     this.firstChars = [];
 
-// Add event listeners for button interactions
+    // Add event listeners for button interactions
     this.buttonNode.addEventListener(
       'keydown',
       this.onButtonKeydown.bind(this)
@@ -47,11 +47,11 @@ class MenuButtonActions {
       }
       this.lastMenuitem = menuitem;
     }
-// Add focus in and focus out event listeners for handling focus styles
+    // Add focus in and focus out event listeners for handling focus styles
     domNode.addEventListener('focusin', this.onFocusin.bind(this));
     domNode.addEventListener('focusout', this.onFocusout.bind(this));
 
-// Add mousedown event listener on window to handle clicks outside the menu
+    // Add mousedown event listener on window to handle clicks outside the menu
     window.addEventListener(
       'mousedown',
       this.onBackgroundMousedown.bind(this),
@@ -60,9 +60,24 @@ class MenuButtonActions {
   }
 
   setFocusToMenuitem(newMenuitem) {
-    this.menuitemNodes.forEach(function (item) {
-// TOUFIC'S COMMENT: Placeholder for the roving tabindex logic  ;)
-    });
+    // static variable lastIndex
+    if (typeof (this.lastIndex) == 'undefined') {
+      this.lastIndex = 0;
+    }
+    // update the tabindex of the previously focused element to "-1" and remove focus
+    this.menuitemNodes[this.lastIndex].tabIndex = -1;
+    this.menuitemNodes[this.lastIndex].classList.remove('focus');
+
+    // Set the new menuitem tabindex to 0
+    newMenuitem.tabIndex = 0;
+
+    // Add focus class to the new menuitem
+    newMenuitem.classList.add('focus');
+
+    // Set focus to the new menuitem
+    newMenuitem.focus();
+    // save last index
+    this.lastIndex = this.menuitemNodes.indexOf(newMenuitem);
   }
 
   setFocusToFirstMenuitem() {
@@ -170,7 +185,7 @@ class MenuButtonActions {
     this.domNode.classList.remove('focus');
   }
 
-//This method is triggered when a keydown event occurs on the menu button.
+  //This method is triggered when a keydown event occurs on the menu button.
 
 
   onButtonKeydown(event) {
@@ -223,7 +238,7 @@ class MenuButtonActions {
     event.preventDefault();
   }
 
-// This method is triggered when a keydown event occurs on a menu item.
+  // This method is triggered when a keydown event occurs on a menu item.
 
   onMenuitemKeydown(event) {
     var tgt = event.currentTarget,
